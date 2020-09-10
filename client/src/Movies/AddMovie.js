@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import {useHistory} from "react-router-dom";
+import axios from "axios";
 
  const AddMovie = props => {
     const initialMovieData = {
@@ -8,6 +10,8 @@ import React, { useState } from "react";
         stars: []
     }
     const [newMovie, setNewMovie] = useState(initialMovieData);
+    const history  = useHistory();
+
 
     const onChange = e => {
         setNewMovie({
@@ -18,8 +22,16 @@ import React, { useState } from "react";
 
     const onSubmit = e => {
         e.preventDefault();
-        console.log(newMovie)
+        console.log(newMovie);
+        axios.post(`http://localhost:5000/api/movies`, newMovie)
+        .then(({data})=>{
+            setNewMovie(initialMovieData);
+            history.push("/");
+        }).catch(err=>{
+            console.log(err);
+        })
     }
+    
 
     return (
         <div className="movie-list">
