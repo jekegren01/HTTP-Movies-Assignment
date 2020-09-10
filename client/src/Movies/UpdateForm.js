@@ -1,17 +1,18 @@
-import React from "react";
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useHistory} from "react-router-dom";
 import axios from "axios";
 
  const UpdateForm = props => {
-    const [updateData, setUpdateData] = useState({
+    const initialUpdateData = {
         id: '',
         title: '',
         director: '',
         metascore: null,
         stars: []
-    });
+    };
+    const [updateData, setUpdateData] = useState(initialUpdateData);
     const {id} = useParams();
+    const history = useHistory();
 
     const onChange = e => {
         setUpdateData({
@@ -25,6 +26,8 @@ import axios from "axios";
         axios.put(`http://localhost:5000/api/movies/${id}`, updateData)
         .then(({data})=>{
             console.log(data);
+            setUpdateData(initialUpdateData)
+            history.push("/");
         }).catch(err=>{
             console.log(err);
         });
